@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Recipe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #806c60;
+            color: #E9EED9;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        header {
+        background-color: #E9EED9;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    header .icon {
+        font-size: 1.2rem;
+        color: #654520;
+        text-decoration: none;
+        margin: 0 10px;
+        display: inline-block;
+    }
+
+    header .icon:hover {
+        color: #9A7E6F;
+    }
+
+    header .menu {
+        display: flex;
+        align-items: center;
+    }
+
+    header .menu a {
+        margin-left: 15px;
+        font-weight: bold;
+    }
+
+    header .menu a:first-child {
+        margin-left: 0;
+    }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #E9EED9;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #654520;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #654520;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        .ingredient-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .ingredient-group input {
+            width: 48%; /* Equal width for ingredient and quantity inputs */
+        }
+
+        .add-ingredient-btn {
+            background-color: #654520;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            display: block;
+            text-align: center;
+        }
+
+        .add-ingredient-btn:hover {
+            background-color: #9A7E6F;
+        }
+
+        .submit-btn {
+            background-color: #654520;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: #9A7E6F;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'index' %}" class="icon" title="RECIPES">📖</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_recipe' %}" class="icon" title="Add Recipe">➕</a>
+            <a href="{% url 'my_recipes' %}" class="icon" title="My Recipes">📜</a>
+            <a href="{% url 'favorites' %}" class="icon" title="Favorites">❤️</a>
+            <a href="{% url 'logout' %}" class="icon" title="Logout">🚪</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="icon" title="Login">🔑</a>
+            <a href="{% url 'register' %}" class="icon" title="Register">📝</a>
+        {% endif %}
+    </header>
+    <div class="container">
+        <h1>Add Recipe</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="title">Title</label>
+            <input type="text" name="title" id="title" required placeholder="Enter recipe title">
+
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="4" required placeholder="Enter recipe description"></textarea>
+
+            <label for="image">Image</label>
+            <input type="file" name="image" id="image" accept="image/*" required>
+
+            
+            <label>Ingredients</label>
+            <div id="ingredients-container">
+                <!-- First ingredient input set -->
+                <div class="ingredient-group">
+                    <input type="text" name="ingredients[]" placeholder="Ingredient name" required>
+                    <input type="text" name="quantities[]" placeholder="Quantity" required>
+                </div>
+            </div>
+
+            <button type="button" class="add-ingredient-btn" id="add-ingredient-btn">+ Add Ingredient</button>
+
+            <button type="submit" class="submit-btn">Add Recipe</button>
+
+            {% if messages %}
+                <div class="error">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </form>
+    </div>
+
+    <script>
+        const addIngredientBtn = document.getElementById('add-ingredient-btn');
+        const ingredientsContainer = document.getElementById('ingredients-container');
+
+        // Add new ingredient inputs when the button is clicked
+        addIngredientBtn.addEventListener('click', () => {
+            const ingredientGroup = document.createElement('div');
+            ingredientGroup.classList.add('ingredient-group');
+
+            ingredientGroup.innerHTML = `
+                <input type="text" name="ingredients[]" placeholder="Ingredient name" required>
+                <input type="text" name="quantities[]" placeholder="Quantity" required>
+            `;
+
+            ingredientsContainer.appendChild(ingredientGroup);
+        });
+    </script>
+</body>
+</html>

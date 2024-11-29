@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #806c60;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h2 {
+            color: #654520;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: #E9EED9;
+            padding: 40px;
+            width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        label {
+            color: #654520;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #9A7E6F;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #654520;
+            color: #E9EED9;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: #9A7E6F;
+        }
+
+        /* Mobile View */
+        @media (max-width: 600px) {
+            form {
+                width: 80%;
+            }
+
+            input {
+                font-size: 16px;
+                padding: 12px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+        <h2>Register Page</h2>
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" placeholder="Enter your username">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" placeholder="Enter your password">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" placeholder="Enter your email">
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>

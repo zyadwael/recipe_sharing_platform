@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ recipe.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #806c60;
+            margin: 0;
+            padding: 0;
+            color: #E9EED9;
+        }
+
+        header {
+            background-color: #E9EED9;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon {
+            color: #654520;
+            font-size: 24px;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .icon:hover {
+            background-color: #9A7E6F;
+            color: #E9EED9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #E9EED9;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .recipe-content {
+            display: flex;
+            flex-wrap: wrap; /* Allow stacking in smaller screens */
+            gap: 20px;
+        }
+
+        .recipe-image {
+            flex: 1;
+            max-width: 400px;
+            border-radius: 10px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .ingredients {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .recipe-title {
+            font-size: 36px;
+            color: #654520;
+            margin-top: 20px;
+        }
+
+        .recipe-description {
+            font-size: 18px;
+            color: #54473F;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .ingredients h3 {
+            font-size: 24px;
+            color: #654520;
+        }
+
+        .ingredients ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ingredients li {
+            font-size: 18px;
+            color: #54473F;
+            margin-bottom: 8px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .recipe-content {
+                flex-direction: column; /* Stack the image and ingredients */
+            }
+
+            .recipe-image {
+                margin-bottom: 20px; /* Add spacing between stacked items */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{% url 'index' %}" class="icon" title="RECIPES">📖</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_recipe' %}" class="icon" title="Add Recipe">➕</a>
+            <a href="{% url 'my_recipes' %}" class="icon" title="My Recipes">📜</a>
+            <a href="{% url 'favorites' %}" class="icon" title="Favorites">❤️</a>
+            <a href="{% url 'logout' %}" class="icon" title="Logout">🚪</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="icon" title="Login">🔑</a>
+            <a href="{% url 'register' %}" class="icon" title="Register">📝</a>
+        {% endif %}
+    </header>
+
+    <div class="container">
+        <h1 class="recipe-title">{{ recipe.title }}</h1>
+        <p class="recipe-description">{{ recipe.description }}</p>
+
+        <div class="recipe-content">
+            {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
+            {% endif %}
+
+            <div class="ingredients">
+                <h3>Ingredients - Quantity</h3>
+                <ul>
+                    {% for ingredient in ingredients %}
+                        <li>{{ ingredient.name }} - {{ ingredient.quantity }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
